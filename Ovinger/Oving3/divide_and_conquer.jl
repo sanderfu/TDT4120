@@ -78,25 +78,48 @@ function binaryintervalsearch(x, delta, coordinate)
         x_2 = x[floor(Int,(length(x)/2)/2)+1,coordinate]
         median = (x_1+x_2)/2
     end
-    println(median)
-    #Functionality teste up tot his point: OK
+    #Functionality teste up to his point: OK
     interval_lower_limit = median-delta
     interval_higher_limit = median+delta
+    println("Interval: ",interval_lower_limit,"-",interval_higher_limit)
 
     #Task: Find number closest to lower_limit
     #Knows: All values are integerers and are sorted w. respect to the coordinate selected in input
-
-
-
-    #Find number closest to upper_limit
-
-
+    A = []
+    for i = 1:length(x[:,coordinate])
+        println("x[i,coordinate]= ", x[i,coordinate])
+        if (x[i,coordinate]>=interval_lower_limit) && (x[i,coordinate]<=interval_higher_limit)
+            push!(A, i)
+        end
+    end
+    println("A:",A)
+    if length(A)>=2
+        return (A[1], A[length(A)])
+    elseif length(A)==1
+        return (A[1],A[1])
+    else
+        return (-1,-1)
+    end
 end
 
 X_1 = [1 2; 2 3; 3 0; 4 0; 5 1; ]
 X_2 = [1 2; 2 0; 3 3; 4 4]
-delta=1.5
+X_3 = [1 0; 2 0; 2 0; 3 0 ; 4 0 ; 5 0 ; 5 0]
+X_4 = [1.0 0.0; 2.0 0.0; 3.0 0.0]
+delta_1=1.5
+delta_2=0.25
+delta_3=1
+delta_4 = 0.50
 coordinate=1
 
-binaryintervalsearch(X_1, delta, coordinate)
-binaryintervalsearch(X_2,delta,coordinate)
+res_1 = binaryintervalsearch(X_1, delta_1, coordinate)
+res_2 = binaryintervalsearch(X_2,delta_2,coordinate)
+res_3 = binaryintervalsearch(X_3, delta_3, coordinate)
+res_4 = binaryintervalsearch(X_4, delta_4, coordinate)
+
+##############################################################################
+#Q3: Brute force løsning
+##############################################################################
+function bruteforce(x)
+
+end
