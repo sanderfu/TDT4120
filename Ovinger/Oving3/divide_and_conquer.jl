@@ -238,7 +238,7 @@ println(bruteforce(x))
 #Comment:
     #This does NOT run in linear time, I did not find a solution for that..
 function inarray(sub, x)
-    for i = 1:size(x, 1)
+    for i in 1:length(x[:,1])
         xi = x[i, :]
         if sub[1] == xi[1] && sub[2] == xi[2]
             return true
@@ -264,15 +264,16 @@ function splitintwo(x,y)
 
     #Now lets split x:
     if xIsOdd
-        x_left = x[1:floor(length(x[:,1])/2+1),:]        #Makes sure the middle element is put in the left array
-        x_right = x[floor(length(x[:,1])/2+1):length(x[:,1])]
+        println("X is odd")
+        x_left = x[1:Int(floor(length(x[:,1])/2+1)),:]        #Makes sure the middle element is put in the left array
+        x_right = x[Int(ceil(length(x[:,1])/2+1)):Int(length(x[:,1])),:]
     else
         x_left = x[1:trunc(Int,length(x[:,1])/2),:]
-        x_right = x[trunc(Int,length(x[:,1])/2+1):length(x[:,1]),:]
+        x_right = x[trunc(Int,length(x[:,1])/2+1):Int(length(x[:,1])),:]
     end
 
     #Now lets split y (in such a way that the coordinates appear in the same order as in x)
-    for i in 1:length(y[:,1])
+    for i in 1:Int(length(y[:,1]))
         element = reshape(y[i,:],(1,2))
         if inarray(element,x_left)
             y_left = [y_left; element]
@@ -285,7 +286,10 @@ function splitintwo(x,y)
 end
 
 #Test
-x = [1.0 2.0; 2.0 3.0; 3.0 2.0; 4.0 5.0; 6.0 6.0; 7.0 1.0]
-y = [7.0 1.0; 1.0 2.0; 3.0 2.0; 2.0 3.0; 4.0 5.0; 6.0 6.0]
+x = [1.0 2.0; 2.0 3.0; 3.0 2.0; 4.0 5.0; 6.0 6.0]
+y = [1.0 2.0; 3.0 2.0; 2.0 3.0; 4.0 5.0; 6.0 6.0]
 
-x_left, x_right, y_left, y_right = splitintwo(x,y)
+x_2 = [2.0 0.0; 3.0 2.0; 4.0 0.0; 4.0 5.0; 5.0 4.0]
+y_2 = mergesort(x_2,2)
+
+x_left, x_right, y_left, y_right = splitintwo(x_2,y_2)
