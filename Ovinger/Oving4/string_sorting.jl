@@ -4,9 +4,9 @@ function countingsortletters(A,position)
     #Get it to the same length as A
 
     #Beautiful option that we cant use due to stupid testing algorithm:
-    B_youwish = Array{String}(undef,1,length(A))
+    #B_youwish = Array{String}(undef,1,length(A))
 
-    #Stupid option we have to use instead to get the f***ing commas
+    #Stupid option we have to use instead to get the commas
     for i in 1:length(A)
         push!(B,"")
     end
@@ -109,27 +109,31 @@ println("---------------------------------------------------------\n\n")
 
 
 function flexradix(A,maxlength)
-    #First, lets sort based on length
-    B = countingsortlength(A)
-
     #Next, lets sort on letter based on position
     #Have to go from maxlength to 1 to get most significant character (first charater) last
-    for i in maxlength:-1:1
-        #Determine the part of A to run counting sort letters on
 
-        longer = []
-        shorter = []
-        for index in 1:length(B)
-            if i> length(B[index])
-                push!(shorter,B[index])
-            else
-                push!(longer,B[index])
-            end
-        end
-        longer = countingsortletters(longer,i)
-        B = vcat(shorter, longer)
+    #Lets first divide the array B up into row where each row consists of strings with same length
+    C = []
+    #We must use +1 on maxlength to
+    for index in 1:maxlength+1
+        push!(C,[])
     end
-    return B
+
+    #Add element A[i] to the row with index "length(A[i])"
+    for index in 1:length(A)
+        push!(C[length(A[index])+1],A[index])
+    end
+
+    #Again we must use the +1 offset
+    for i in maxlength:-1:1
+        #Sorts row with as many characters as described by i
+        C[i+1]=countingsortletters(C[i+1],i)
+
+        #Concatinates the column sorted on the character i to the subarray that has i-1 characters (again w. offset)
+        C[i]=vcat(C[i],C[i+1])
+    end
+    
+    return C[1]
 end
 
 test3 = flexradix(["kobra", "aggie", "agg", "kort", "hyblen"], 6)
@@ -148,3 +152,12 @@ end
 println("\nFungerte alt? Prøv å kjør koden i inginious!")
 println("Husk at disse testene ikke alltid sjekker alle edge-cases")
 println("---------------------------------------------------------\n\n")
+
+#How to make a 2D-array (not matrix, array of arrays the traditonal way not the fancy julia actual 2D matrix)
+C=[]
+for i in 1:5
+    push!(C,[])
+end
+vec = [123,456]
+push!(C[1],"test")
+#push!(C[3][1],"test")
